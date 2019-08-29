@@ -73,7 +73,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'w0rp/ale'
 
 " Python
-Plug 'vim-scripts/indentpython.vim'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 
 " Bookmarks
 Plug 'kshenoy/vim-signature'
@@ -87,6 +88,9 @@ call plug#end()
 "组件应用命令
 color koehler
 let g:SnazzyTransparent = 1
+
+"文件管理
+map ff :!ranger<CR>
 
 "分屏
 map sj :set nosplitright<CR>:vsplit<CR>
@@ -113,8 +117,8 @@ map sh <C-w>t<C-w>K
 
 "标签操作
 map nt :tabe<CR>   "创建table
-map <LEADER>- :-tabnext<CR>   "切换至前面一个
-map <LEADER>= :+tabnext<CR>   "切换至后面一个
+map <LEADER>[ :-tabnext<CR>
+map <LEADER>] :+tabnext<CR>
 
 "基本操作
 map S :w<CR>
@@ -122,7 +126,6 @@ map s <nop>
 map R :source $MYVIMRC<CR>
 map Q :q<CR>
 map <LEADER>c :set spell!<CR>
-map <LEADER>h <Esc>ea<C-x>s
 
 "高级配置
 map <LEADER><LEADER> <Esc>/<++><CR>:nohl<CR>c4l
@@ -142,4 +145,5 @@ let NERDTreeMapOpenInTab = "o"
 let NERDTreeMapPreview = "p"
 let NERDTreeMapCloseDir = ""
 let NERDTreeMapChangeRoot = "y"
+
 
