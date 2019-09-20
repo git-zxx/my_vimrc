@@ -1,0 +1,188 @@
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+
+set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg1 = substitute(arg1, '!', '\!', 'g')
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg2 = substitute(arg2, '!', '\!', 'g')
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let arg3 = substitute(arg3, '!', '\!', 'g')
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      if empty(&shellxquote)
+        let l:shxq_sav = ''
+        set shellxquote&
+      endif
+      let cmd = '"' . $VIMRUNTIME . '\diff"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  let cmd = substitute(cmd, '!', '\!', 'g')
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+  if exists('l:shxq_sav')
+    let &shellxquote=l:shxq_sav
+  endif
+endfunction
+
+
+"                         __  __     __     ___
+"                        |  \/  |_   \ \   / (_)_ __ ___  _ __ ___
+"========================| |\/| | | | \ \ / /| | '_ ` _ \| '__/ __|========================
+"========================| |  | | |_| |\ V / | | | | | | | | | (__ ========================
+"========================|_|  |_|\__, | \_/  |_|_| |_| |_|_|  \___|========================
+"                                |___/
+
+let &t_ut=''
+let mapleader=" "
+
+
+"Settings
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set list
+set scrolloff=5
+set tw=0
+set indentexpr=
+set backspace=indent,eol,start
+set foldmethod=indent
+set foldlevel=99
+set number
+set norelativenumber
+set cursorline
+set wrap
+set showcmd
+set wildmenu
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set autochdir
+set laststatus=2
+set guifont=楷体:h14:cDEFAULT
+"color elford\evening
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+"Other settings
+set nocompatible
+
+filetype on
+filetype indent on
+filetype plugin on
+filetype plugin indent on
+
+exec "nohlsearch"
+
+noremap k j
+noremap j h
+noremap h i
+noremap H I
+noremap i k
+noremap - Nzz
+noremap = nzz
+noremap <LEADER><CR> :nohlsearch<CR>
+
+"model install
+call plug#begin('~/.vim/plugged')
+
+Plug 'vim-airline/vim-airline'  "鐘舵€佹爮缁勪欢
+Plug 'connorholyday/vim-snazzy'  "閰嶈壊缁勪欢
+
+Plug 'Valloric/YouCompleteMe'  "浠ｇ爜琛ュ叏鎻掍欢
+
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }   "鏂囦欢鏍戞彃浠?
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Error checking
+Plug 'w0rp/ale'
+
+" Python
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+
+" Bookmarks
+Plug 'kshenoy/vim-signature'
+
+" Taglist
+Plug 'majutsushi/tagbar', { 'on': 'TagbarOpenAutoClose' }
+
+call plug#end()
+"PlugInstall  "Installing
+
+"model settings
+color koehler
+let g:SnazzyTransparent = 1
+
+"file editor
+map ff :!ranger<CR>
+
+"Split window
+map sj :set nosplitright<CR>:vsplit<CR>
+map sl :set splitright<CR>:vsplit<CR>
+map si :set nosplitbelow<CR>:split<CR>
+map sk :set splitbelow<CR>:split<CR>
+
+"Jump around windows
+map <LEADER>e <C-w><up>
+map <LEADER>d <C-w><down>
+map <LEADER>s <C-w><left>
+map <LEADER>f <C-w><right>
+map <LEADER><TAB> :colorscheme 
+
+"Change size of windows
+
+map <up> :res +5<CR>
+map <down> :res -5<CR>
+map <left> :vertical resize +5<CR>
+map <right> :vertical resize -5<CR>
+
+"Convert v&h
+map sv <C-w>t<C-w>H
+map sh <C-w>t<C-w>K
+
+"Tag operation
+map nt :tabe<CR>   "鍒涘缓table
+map <LEADER>[ :-tabnext<CR>
+map <LEADER>] :+tabnext<CR>
+
+"鍩虹鎿嶄綔
+map S :w<CR>
+map s <nop>
+map R :source $MYVIMRC<CR>
+map Q :q<CR>
+map <LEADER>c :set spell!<CR>
+
+"楂樼骇閰嶇疆
+map <LEADER><LEADER> <Esc>/<++><CR>:nohl<CR>c4l
+map tx : ! figlet
+
+"鏂囦欢鏍戝揩鎹烽敭
+map tt :NERDTreeToggle<CR>
+let g:NERDTreeDirArrowExpandable = '鈻?
+let g:NERDTreeDirArrowCollapsible = '鈻?
+let NERDTreeMapOpenExpl = ""
+let NERDTreeMapUpdir = ""
+let NERDTreeMapUpdirKeepOpen = "O"
+let NERDTreeMapOpenSplit = ""
+let NERDTreeOpenVSplit = "h"
+let NERDTreeMapActivateNode = "l"
+let NERDTreeMapOpenInTab = "o"
+let NERDTreeMapPreview = "p"
+let NERDTreeMapCloseDir = ""
+let NERDTreeMapChangeRoot = "y"
+
+
+
+
